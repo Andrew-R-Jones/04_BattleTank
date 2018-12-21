@@ -26,3 +26,9 @@ You're welcome to download, fork or do whatever else legal with all files!
 
 Enjoy yourself. 
 Andrew Jones
+
+
+## Lectures Covered
+* BT01 Intro, Notes & Assets
+* BT02 Game Design Document (GDD)
+*
