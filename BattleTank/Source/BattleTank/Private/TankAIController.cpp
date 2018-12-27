@@ -6,12 +6,13 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	AActor* AIPlayerController = GetAIControlledTank();
+
+	/*AActor* AIPlayerController = GetAIControlledTank();
 
 	if (!AIPlayerController)
 		UE_LOG(LogTemp, Error, TEXT("No AI Controller possessed"))
 	else
-		UE_LOG(LogTemp, Warning, TEXT("AI Possessed Tank: %s"), *AIPlayerController->GetName())
+		UE_LOG(LogTemp, Warning, TEXT("AI Possessed Tank: %s"), *AIPlayerController->GetName())*/
 
 
 	AActor* FirstPlayerController = GetPlayerTank();
