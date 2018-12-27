@@ -29,15 +29,71 @@ void ATankPlayerController::AimTowardsCrosshair()
 {
 	if (!GetControlledTank()) return;
 
-	// get world location if line trace through crosshair
-	// if it hits the landscape
-		// tell the controlled tank to aim at this point
+	FVector OUTHitLocation; // out parameter
+	if (GetSightRayHitLocation(OUTHitLocation)) // Has "side-effect, is going to line trace
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *OUTHitLocation.ToString())
+		// TODO Tell the controlled tank to aim at this point
+	}
 
 }
+// get world location of line trace through crosshair, true if hits the landscape
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OUTHitLocation) const
+{
+	// Find the crosshair position
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
+	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+
+	FVector LookDirection;
+	// De-project the screen position of the crosshair to a world direction
+	if (GetLookDiretion(ScreenLocation, LookDirection))
+	{
+		// Line-trace along that LookDirection and see what we hit (up to max range)
+		GetLookVectorHitLocation(LookDirection, OUTHitLocation);		
+	}
+	return true;
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OUTHitLocation) const
+{
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
+	if (GetWorld()->LineTraceSingleByChannel(
+		HitResult, 
+		StartLocation, 
+		EndLocation, 
+		ECollisionChannel::ECC_Visibility)
+		)
+	{
+		// set OUTHitLocation
+		OUTHitLocation = HitResult.Location;
+		return true;
+	}
+	OUTHitLocation = FVector(0.0f);
+		return false;
+}
+
+
+
+bool ATankPlayerController::GetLookDiretion(FVector2D ScreenLocation, FVector& LookDirection) const
+{
+	FVector CameraWorldLocation; // to be discarded
+	return DeprojectScreenPositionToWorld
+	(
+		ScreenLocation.X, 
+		ScreenLocation.Y, 
+		CameraWorldLocation, 
+		LookDirection
+	);
+}
+
+
 
 ATank* ATankPlayerController::GetControlledTank() const 
 {
-
 	return Cast<ATank>(GetPawn());
 }
 
