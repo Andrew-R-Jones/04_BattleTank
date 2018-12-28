@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
+#include "Tank.h"
 
 void ATankPlayerController::Tick(float DeltaTime) // Tick	
 {
@@ -37,10 +38,10 @@ void ATankPlayerController::AimTowardsCrosshair()
 	}
 
 }
-// get world location of line trace through crosshair, true if hits the landscape
+// get world location of line trace through cross hair, true if hits the landscape
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OUTHitLocation) const
 {
-	// Find the crosshair position
+	// Find the cross hair position
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
