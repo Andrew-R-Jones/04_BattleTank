@@ -30,16 +30,16 @@ void ATankPlayerController::AimTowardsCrosshair()
 {
 	if (!GetControlledTank()) return;
 
-	FVector OUTHitLocation; // out parameter
-	if (GetSightRayHitLocation(OUTHitLocation)) // Has "side-effect, is going to line trace
+	FVector OutHitLocation; // out parameter
+	if (GetSightRayHitLocation(OutHitLocation)) // Has "side-effect, is going to line trace
 	{
 		// TODO Tell the controlled tank to aim at this point
-		GetControlledTank()->AimAt(OUTHitLocation);
+		GetControlledTank()->AimAt(OutHitLocation);
 	}
 
 }
 // get world location of line trace through cross hair, true if hits the landscape
-bool ATankPlayerController::GetSightRayHitLocation(FVector& OUTHitLocation) const
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
 	// Find the cross hair position
 	int32 ViewportSizeX, ViewportSizeY;
@@ -48,16 +48,16 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OUTHitLocation) cons
 	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
 
 	FVector LookDirection;
-	// De-project the screen position of the crosshair to a world direction
+	// De-project the screen position of the cross hair to a world direction
 	if (GetLookDiretion(ScreenLocation, LookDirection))
 	{
 		// Line-trace along that LookDirection and see what we hit (up to max range)
-		GetLookVectorHitLocation(LookDirection, OUTHitLocation);		
+		GetLookVectorHitLocation(LookDirection, OutHitLocation);		
 	}
 	return true;
 }
 
-bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OUTHitLocation) const
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const
 {
 	FHitResult HitResult;
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
@@ -70,10 +70,10 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		)
 	{
 		// set OUTHitLocation
-		OUTHitLocation = HitResult.Location;
+		OutHitLocation = HitResult.Location;
 		return true;
 	}
-	OUTHitLocation = FVector(0.0f);
+	OutHitLocation = FVector(0.0f);
 		return false;
 }
 
