@@ -35,6 +35,7 @@ void ATank::BeginPlay()
 	
 }
 
+
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -49,16 +50,18 @@ void ATank::AimAt(FVector OutHitLocation)
 
 void ATank::Fire()
 {
+	bool isReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadTimeInSeconds;
 
+	if (Barrel && isReloaded) 
+	{
+		// Spawn a projectile at the socket location of the barrel
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
 
-	if (!Barrel) { return; }
-	// Spawn a projectile at the socket location of the barrel
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-		ProjectileBlueprint, 
-		Barrel->GetSocketLocation(FName("Projectile")),
-		Barrel->GetSocketRotation(FName("Projectile"))		
-		);
-
-	Projectile->LaunchProjectile(LaunchSpeed);
-
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+	}
 }
