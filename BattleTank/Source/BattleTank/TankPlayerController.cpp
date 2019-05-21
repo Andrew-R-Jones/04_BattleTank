@@ -2,7 +2,6 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
-#include "tank.h"
 
 void ATankPlayerController::Tick(float DeltaTime) // Tick	
 {
@@ -16,7 +15,7 @@ void ATankPlayerController::Tick(float DeltaTime) // Tick
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent)) { return; }
 	FoundAimingComponent(AimingComponent);
 	
@@ -25,13 +24,14 @@ void ATankPlayerController::BeginPlay()
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!ensure(GetControlledTank())) return;
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 
 	FVector OutHitLocation; // out parameter
 	if (GetSightRayHitLocation(OutHitLocation)) // Has "side-effect, is going to line trace
 	{
 		// Tell the controlled tank to aim at this point
-		GetControlledTank()->AimAt(OutHitLocation);
+		AimingComponent->AimAt(OutHitLocation);
 	}
 
 }
@@ -86,12 +86,5 @@ bool ATankPlayerController::GetLookDiretion(FVector2D ScreenLocation, FVector& L
 		CameraWorldLocation, 
 		LookDirection
 	);
-}
-
-
-
-ATank* ATankPlayerController::GetControlledTank() const 
-{
-	return Cast<ATank>(GetPawn());
 }
 

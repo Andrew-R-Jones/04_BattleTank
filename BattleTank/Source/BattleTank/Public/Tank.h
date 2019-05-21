@@ -7,7 +7,6 @@
 #include "Tank.generated.h" 
 
 class UTankBarrel;
-class UTankAimingComponent;
 class UTankTurret;
 class AProjectile;
 
@@ -19,12 +18,6 @@ class BATTLETANK_API ATank : public APawn
 public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
-
-	void AimAt(FVector OutHitLocation);
-
-protected:
-	UPROPERTY(BlueprintReadOnly) // gives access in the tank blueprint components, then can access functions, which are blueprint callable
-	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
 	// Sets default values for this pawn's properties

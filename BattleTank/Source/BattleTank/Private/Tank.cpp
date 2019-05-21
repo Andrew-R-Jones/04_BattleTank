@@ -3,7 +3,6 @@
 #include "Tank.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
-#include "TankAimingComponent.h"
 #include "engine/World.h"
 
 // Sets default values
@@ -20,17 +19,6 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay(); // Needed for blueprint Begin Play to run!
 	auto TankName = GetName();
-
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
-
-}
-
-
-void ATank::AimAt(FVector OutHitLocation)
-{
-	if (!ensure(TankAimingComponent)) return;
-	TankAimingComponent->AimAt(OutHitLocation, LaunchSpeed);
-	UE_LOG(LogTemp, Warning, TEXT("im here"))
 
 }
 
