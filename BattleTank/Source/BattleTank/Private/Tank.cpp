@@ -1,10 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "engine/World.h"
 
 // Sets default values
@@ -14,7 +13,6 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	auto TankName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s DONKEY Tank c++ Construct"), *TankName);
 
 }
 
@@ -22,8 +20,8 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay(); // Needed for blueprint Begin Play to run!
 	auto TankName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s DONKEY Tank c++ Begin Play"), *TankName);
 
+	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
 
 }
 
@@ -32,6 +30,8 @@ void ATank::AimAt(FVector OutHitLocation)
 {
 	if (!ensure(TankAimingComponent)) return;
 	TankAimingComponent->AimAt(OutHitLocation, LaunchSpeed);
+	UE_LOG(LogTemp, Warning, TEXT("im here"))
+
 }
 
 void ATank::Fire()
